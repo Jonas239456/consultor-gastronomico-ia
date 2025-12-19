@@ -1021,39 +1021,29 @@ export default function PlateWise() {
     // 3. Usar IA para categorizar os itens encontrados
     // 4. Mapear preços e descrições
     
-    // Simulação de itens REAIS encontrados no cardápio da imagem
-    const realMenuItems: MenuItem[] = [
-      {
-        name: 'Carpaccio Regional',
-        category: 'entrada',
-        price: 'R$ 38',
-        description: 'Peixe local em fatias finas com temperos regionais',
-        priceRange: 'medio',
-        dishType: 'frutos-do-mar',
-        isRegional: true,
-        culturalInfo: 'Especialidade da região com peixe fresco local'
-      },
-      {
-        name: 'Virado à Paulista',
-        category: 'principal',
-        price: 'R$ 82',
-        description: 'Especialidade tradicional de São Paulo',
-        priceRange: 'alto',
-        dishType: 'terrestre',
-        isRegional: true,
-        culturalInfo: 'Prato típico paulista com feijão, linguiça e couve'
-      },
-      {
-        name: 'Vinho Tinto Reserva',
-        category: 'bebida',
-        price: 'R$ 54',
-        description: 'Taça de vinho tinto encorpado',
-        priceRange: 'alto',
-        beverageType: 'vinho-tinto'
-      }
-    ]
-    
-    return realMenuItems
+   const analyzeRealMenuFromImage = async (
+  imageData: string,
+  language: string = 'pt'
+): Promise<MenuItem[]> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/analyze`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      imageBase64: imageData,
+      language
+    })
+  })
+
+  if (!response.ok) {
+    throw new Error('Erro ao analisar cardápio no backend')
+  }
+
+  const data = await response.json()
+  return data.items as MenuItem[]
+}
+
   }
 
   // NEW: Genius Feature - Check if menu has multiple categories
