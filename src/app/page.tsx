@@ -982,18 +982,6 @@ export default function PlateWise() {
         setUploadedImage(capturedImage)
         setStep('upload-analyzing')
         
-     // ✅ Análise REAL do cardápio capturado
-setTimeout(async () => {
-  try {
-    const realMenuItems = await analyzeRealMenuFromImage(capturedImage, language)
-    setMenuItems(realMenuItems)
-    checkForMacroQuestion(realMenuItems)
-  } catch (error) {
-    console.error('Erro ao analisar cardápio:', error)
-  }
-}, 2000)
-
-
   const skipTranslation = () => {
     setShowTranslateDialog(false)
     setShowCamera(false)
@@ -1006,7 +994,8 @@ setTimeout(async () => {
    // ✅ Análise REAL usando backend (Google Vision)
 setTimeout(async () => {
   try {
-    const realMenuItems = await analyzeRealMenuFromImage(imageData, 'pt')
+   const realMenuItems = await analyzeRealMenuFromImage(capturedImage, 'pt')
+
     setMenuItems(realMenuItems)
     checkForMacroQuestion(realMenuItems)
   } catch (error) {
