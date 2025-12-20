@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const imageBase64 = body.image;
+    const { imageBase64, language } = body;
 
     if (!imageBase64) {
       return NextResponse.json(
@@ -25,18 +25,12 @@ export async function POST(req: Request) {
       `https://vision.googleapis.com/v1/images:annotate?key=${apiKey}`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           requests: [
             {
-              image: { content: imageBase64 },
-              features: [
-                {
-                  type: "TEXT_DETECTION",
-                },
-              ],
+              image: { content: imageBase64.replace(/^data:image\/\w+;base64,/, "") },
+              features: [{ type: "TEXT_DETECTION" }],
             },
           ],
         }),
@@ -52,16 +46,41 @@ export async function POST(req: Request) {
 
     const result = await response.json();
 
-    // 👉 EXTRAÇÃO DO TEXTO REAL DO CARDÁPIO
-    const text =
+    const fullText =
       result.responses?.[0]?.fullTextAnnotation?.text || "";
 
+    // 👉 SIMPLES PARSER (depois você pode evoluir)
+    const lines = fullText
+      .split("\n")
+      .map(l => l.trim())
+      .filter(Boolean);
+
+    const items = lines.map(line => {
+      let category: "entrada" | "principal" | "bebida" | "sobremesa" = "principal";
+
+      const lower = line.toLowerCase();
+
+      if (lower.includes("suco") || lower.includes("cerveja") || lower.includes("vinho")) {
+        category = "bebida";
+      } else if (lower.includes("bolo") || lower.includes("doce")) {
+        category = "sobremesa";
+      } else if (lower.includes("entrada")) {
+        category = "entrada";
+      }
+
+      return {
+        name: line,
+        category,
+      };
+    });
+
     return NextResponse.json({
-      success: true,
-      text, // 👈 TEXTO REAL EXTRAÍDO DA IMAGEM
-      raw: result, // opcional, útil para debug
+      items,
+      rawText: fullText, // útil para debug
+      language: language || "pt",
     });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { error: "Erro interno no servidor" },
       { status: 500 }
