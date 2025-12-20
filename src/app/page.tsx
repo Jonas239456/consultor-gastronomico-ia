@@ -1045,14 +1045,6 @@ const analyzeRealMenuFromImage = async (
 }
 
 
-  if (!response.ok) {
-    throw new Error('Erro ao analisar cardápio no backend')
-  }
-
-  const data = await response.json()
-  return data.items as MenuItem[]
-}
-
 
   // NEW: Genius Feature - Check if menu has multiple categories
   const checkForMacroQuestion = (items: MenuItem[]) => {
