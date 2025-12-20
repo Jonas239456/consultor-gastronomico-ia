@@ -982,15 +982,17 @@ export default function PlateWise() {
         setUploadedImage(capturedImage)
         setStep('upload-analyzing')
         
-        // CORREÇÃO: Simular análise REAL do cardápio capturado
-        setTimeout(() => {
-          const realMenuItems = analyzeRealMenuFromImage(capturedImage, language)
-          setMenuItems(realMenuItems)
-          checkForMacroQuestion(realMenuItems)
-        }, 2000)
-      }
-    }, 2000)
+     // ✅ Análise REAL do cardápio capturado
+setTimeout(async () => {
+  try {
+    const realMenuItems = await analyzeRealMenuFromImage(capturedImage, language)
+    setMenuItems(realMenuItems)
+    checkForMacroQuestion(realMenuItems)
+  } catch (error) {
+    console.error('Erro ao analisar cardápio:', error)
   }
+}, 2000)
+
 
   const skipTranslation = () => {
     setShowTranslateDialog(false)
