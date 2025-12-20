@@ -1081,17 +1081,7 @@ setTimeout(async () => {
         setUploadedImage(imageData)
         setStep('upload-analyzing')
         
-        // CORREÇÃO: Simular análise REAL do cardápio uploadado
-        setTimeout(() => {
-          const realMenuItems = analyzeRealMenuFromImage(imageData, 'pt')
-          setMenuItems(realMenuItems)
-          checkForMacroQuestion(realMenuItems)
-        }, 2000)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
+    
   const handleAllergyToggle = (allergy: string) => {
     setSelectedAllergies(prev => 
       prev.includes(allergy) 
