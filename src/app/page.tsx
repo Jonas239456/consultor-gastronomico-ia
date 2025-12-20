@@ -1017,17 +1017,7 @@ setTimeout(async () => {
     }
   }
 
-  // CORREÇÃO: Nova função para analisar o cardápio real da imagem
-  const analyzeRealMenuFromImage = (imageData: string, language: string = 'pt'): MenuItem[] => {
-    // Simular OCR real - em produção, isso seria uma chamada para API de OCR
-    // Por enquanto, vamos simular que encontrou itens baseados na imagem real
-    
-    // Esta função deveria:
-    // 1. Enviar a imagem para um serviço de OCR (Google Vision, AWS Textract, etc.)
-    // 2. Extrair o texto do cardápio
-    // 3. Usar IA para categorizar os itens encontrados
-    // 4. Mapear preços e descrições
-    
+
    const analyzeRealMenuFromImage = async (
   imageData: string,
   language: string = 'pt'
