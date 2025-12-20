@@ -1018,7 +1018,7 @@ setTimeout(async () => {
   }
 
 
- const analyzeRealMenuFromImage = async (
+const analyzeRealMenuFromImage = async (
   imageData: string,
   language: string = 'pt'
 ): Promise<MenuItem[]> => {
@@ -1035,6 +1035,15 @@ setTimeout(async () => {
       })
     }
   )
+
+  if (!response.ok) {
+    throw new Error('Erro ao analisar cardápio no backend')
+  }
+
+  const data = await response.json()
+  return data.items as MenuItem[]
+}
+
 
   if (!response.ok) {
     throw new Error('Erro ao analisar cardápio no backend')
