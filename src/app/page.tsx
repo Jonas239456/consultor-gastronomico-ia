@@ -1018,20 +1018,23 @@ setTimeout(async () => {
   }
 
 
-   const analyzeRealMenuFromImage = async (
+ const analyzeRealMenuFromImage = async (
   imageData: string,
   language: string = 'pt'
 ): Promise<MenuItem[]> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/menu/analyze`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      imageBase64: imageData,
-      language
-    })
-  })
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/menu/analyze`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        imageBase64: imageData,
+        language
+      })
+    }
+  )
 
   if (!response.ok) {
     throw new Error('Erro ao analisar cardápio no backend')
@@ -1041,7 +1044,6 @@ setTimeout(async () => {
   return data.items as MenuItem[]
 }
 
-  }
 
   // NEW: Genius Feature - Check if menu has multiple categories
   const checkForMacroQuestion = (items: MenuItem[]) => {
